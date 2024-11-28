@@ -1,6 +1,8 @@
 CMIP6/
 ACCESS-CM2/
-
+HWSD_1247/
+*.csv
+*.xlsx
 data/
 venv/
 cropped_data/

@@ -6,7 +6,7 @@ import geopandas as gpd
 
 # 1. 加载 GeoJSON 文件
 # grasslands_geojson_file = '/home/r/Desktop/r-climate/data/clipped_data.geojson'
-grasslands_geojson_file = 'data/clipped_data.geojson'
+grasslands_geojson_file = 'clipped_data.geojson'
 
 grasslands_gdf = gpd.read_file(grasslands_geojson_file)
 
@@ -14,14 +14,14 @@ grasslands_gdf = gpd.read_file(grasslands_geojson_file)
 grasslands_gdf_filtered = grasslands_gdf[grasslands_gdf['value'] == 10]
 
 # 输入文件夹列表
+ssp_scenario = 'ssp585'  # 可以根据需要动态改变，比如 'ssp245' 等
 tiff_folders = [
-    'CMIP6/ACCESS-CM2/ssp585/2021-2040s/',
-    'data/HWSD_1247/tif/'
-
+    os.path.join(ssp_scenario, 'ACCESS-CM2', '2021-2040s'),
+    os.path.join('HWSD_1247', 'tif')
 ]
 
 # 指定输出文件夹路径
-geojson_output_folder = 'cropped_data/geojson/'
+geojson_output_folder = os.path.join('cropped_data', ssp_scenario, 'geojson')
 tiff_output_folder = 'cropped_data/tiff/'
 
 # 创建输出文件夹（如果不存在）
