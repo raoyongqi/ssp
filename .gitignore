@@ -1,0 +1,6 @@
+CMIP6/
+ACCESS-CM2/
+
+data/
+venv/
+cropped_data/
