@@ -5,6 +5,9 @@ import geopandas as gpd
 import cartopy.crs as ccrs
 import os
 ssp_scenario = 'ssp126'
+
+
+
 # 定义 Albers 投影坐标系
 albers_proj = ccrs.AlbersEqualArea(
     central_longitude=105,

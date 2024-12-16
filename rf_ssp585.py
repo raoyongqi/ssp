@@ -34,16 +34,20 @@ def get_feature_name(file_name):
     return feature_name
 
 # 1. 读取Excel文件
-file_path = 'data/output_data.xlsx'  # 替换为你的文件路径
+file_path = 'data/climate_soil_tif.xlsx'  # 替换为你的文件路径
 data = pd.read_excel(file_path)
 
 # 2. 筛选特征列：以 '_resampled' 结尾，'wc' 开头（不区分大小写），以及 'LON' 和 'LAT' 列
-feature_columns = [col for col in data.columns if col.endswith('_resampled') or col.lower().startswith('wc') or col in ['LON', 'LAT']]
+feature_columns =  [col for col in data.columns if col != 'RATIO']
 
 # 3. 分离特征变量和目标变量
 X = data[feature_columns]
+
+
+X.columns = X.columns.str.lower()
+
 X.columns = X.columns.str.replace('wc2.1_5m_', '')
-y = data['PL']  # 目标变量
+y = data['RATIO']  # 目标变量
 
 # 4. 分割数据集为训练集和测试集
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -62,6 +66,8 @@ r2 = r2_score(y_test, y_pred)
 # 输出结果
 print(f"均方误差 (MSE): {mse:.4f}")
 print(f"R² 得分: {r2:.4f}")
+
+# 读取所有tif文件的数据和经纬度信息
 ssp_scenario = 'ssp585'  # 可以根据需要动态改变，比如 'ssp245' 等
 
 # 读取所有tif文件的数据和经纬度信息
@@ -81,6 +87,9 @@ for i, file in enumerate(tif_files):
     if i == 0:  # 只保存第一个tif的经纬度信息
         lons, lats = xs, ys
 
+for i, arr in enumerate(data_list):
+    print(f"Shape of array {i}: {arr.shape}")
+
 # 将数据和经纬度转换为二维数组
 data_stack = np.stack(data_list, axis=-1)
 rows, cols, bands = data_stack.shape
@@ -99,8 +108,8 @@ df.columns = df.columns.str.replace('wc2.1_5m_', '')
 model_feature_names = feature_columns
 pd.set_option('display.max_columns', None)
 
-for col in X.columns:
-    print(col)
+# for col in X.columns:
+#     print(col)
 
 df.columns = df.columns.str.replace(r'bio(\d+)', r'bio_\1', regex=True)
 df.columns = df.columns.str.replace(r'bio_0(\d)', r'bio_\1', regex=True)
@@ -108,10 +117,11 @@ df.columns = df.columns.str.replace(r'bio_0(\d)', r'bio_\1', regex=True)
 # # 将 'bio_01' 变为 'bio_1'
 # df.columns = df.columns.str.replace(r'bio_0', 'bio_')
 df.columns = [col if '_' in col else pd.Series([col]).str.replace(r'(tmax|tmin)(\d+)', r'\1_\2', regex=True)[0] for col in df.columns]
+df.columns = df.columns.str.lower()
 
 df = df[X.columns]
 
-# 进行预测
+# # 进行预测
 y_pred = rf.predict(df)
 
 # 将预测结果转换为二维数组

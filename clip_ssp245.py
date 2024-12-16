@@ -6,12 +6,10 @@ import geopandas as gpd
 
 # 1. 加载 GeoJSON 文件
 # grasslands_geojson_file = '/home/r/Desktop/r-climate/data/clipped_data.geojson'
-grasslands_geojson_file = 'clipped_data.geojson'
-
+grasslands_geojson_file = '中华人民共和国.json'
 grasslands_gdf = gpd.read_file(grasslands_geojson_file)
 
-# 2. 筛选出值等于 10 的 Grasslands (草地)
-grasslands_gdf_filtered = grasslands_gdf[grasslands_gdf['value'] == 10]
+grasslands_gdf_filtered = grasslands_gdf
 
 # 输入文件夹列表
 ssp_scenario = 'ssp245'  # 可以根据需要动态改变，比如 'ssp245' 等
@@ -85,13 +83,24 @@ for tiff_folder in tiff_folders:
 
             # 将 GeoJSON 中的值更新为裁剪后的 TIFF 中的值
             with rasterio.open(tiff_output_path) as cropped_src:
-                for idx, row in grasslands_gdf_filtered.iterrows():
+                for idx, row in grasslands_gdf.iterrows():
                     geom = row['geometry']
                     if geom.is_empty:
                         continue
 
-                    # 将几何体转换为 TIFF 窗口坐标
-                    coords = np.array(geom.exterior.coords)
+                    # 检查几何体类型，并根据不同类型处理
+                    if geom.geom_type == 'Polygon':
+                        # 如果是 Polygon，直接处理 exterior
+                        coords = np.array(geom.exterior.coords)
+                    elif geom.geom_type == 'MultiPolygon':
+                        # 如果是 MultiPolygon，通过 .geoms 访问其中的每个 Polygon
+                        coords = []
+                        for poly in geom.geoms:  # 使用 .geoms 获取所有 Polygon
+                            coords.extend(np.array(poly.exterior.coords))  # 添加每个多边形的外部坐标
+                    else:
+                        continue  # 如果是其他类型，跳过
+
+                    # 将几何体坐标转换为 TIFF 窗口坐标
                     pixel_coords = [cropped_src.index(x, y) for x, y in coords]
 
                     # 计算区域的像素值
@@ -104,12 +113,14 @@ for tiff_folder in tiff_folders:
 
                     if pixel_values:
                         avg_value = np.nanmean(pixel_values)  # 使用平均值来代表区域
-                        grasslands_gdf_filtered.at[idx, 'value'] = avg_value
+                        grasslands_gdf.at[idx, 'value'] = avg_value
                     else:
-                        grasslands_gdf_filtered.at[idx, 'value'] = np.nan
+                        grasslands_gdf.at[idx, 'value'] = np.nan
 
             # 保存更新后的 GeoJSON 文件
-            grasslands_gdf_filtered.to_file(geojson_output_path, driver="GeoJSON")
-            
+            grasslands_gdf.to_file(geojson_output_path, driver="GeoJSON")
+
+
+
             print(f"Clipped TIFF image saved to {tiff_output_path}")
             print(f"Corresponding GeoJSON saved to {geojson_output_path}")

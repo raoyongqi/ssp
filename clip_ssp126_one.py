@@ -5,14 +5,14 @@ import numpy as np
 import geopandas as gpd
 
 # 1. 加载 GeoJSON 文件
-grasslands_geojson_file = 'clipped_data.geojson'
+grasslands_geojson_file = '中华人民共和国.json'
 grasslands_gdf = gpd.read_file(grasslands_geojson_file)
 
+grasslands_gdf_filtered = grasslands_gdf
 
 ssp_scenario = 'ssp126'
 
 # 2. 筛选出值等于 10 的 Grasslands (草地)
-grasslands_gdf_filtered = grasslands_gdf[grasslands_gdf['value'] == 10]
 
 # 输入文件夹列表
 tiff_folders = [
