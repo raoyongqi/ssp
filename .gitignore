@@ -6,3 +6,9 @@ HWSD_1247/
 data/
 venv/
 cropped_data/
+tiff/
+*.png
+result/
+pic/
+*.tiff
+*.tif

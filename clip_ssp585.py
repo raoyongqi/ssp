@@ -16,13 +16,14 @@ grasslands_gdf_filtered = grasslands_gdf[grasslands_gdf['value'] == 10]
 # 输入文件夹列表
 ssp_scenario = 'ssp585'  # 可以根据需要动态改变，比如 'ssp245' 等
 tiff_folders = [
-    os.path.join(ssp_scenario, 'ACCESS-CM2', '2021-2040s'),
+    os.path.join( 'ACCESS-CM2', ssp_scenario,'2021-2040s'),
     os.path.join('HWSD_1247', 'tif')
 ]
 
 # 指定输出文件夹路径
 geojson_output_folder = os.path.join('cropped_data', ssp_scenario, 'geojson')
-tiff_output_folder = 'cropped_data/tiff/'
+tiff_output_folder =  os.path.join('cropped_data', ssp_scenario, 'tiff')
+
 
 # 创建输出文件夹（如果不存在）
 os.makedirs(geojson_output_folder, exist_ok=True)

@@ -21,7 +21,8 @@ tiff_folders = [
 
 # 指定输出文件夹路径
 geojson_output_folder = os.path.join('cropped_data', ssp_scenario, 'geojson')
-tiff_output_folder = 'cropped_data/tiff/'
+tiff_output_folder =  os.path.join('cropped_data', ssp_scenario, 'tiff')
+
 
 # 创建输出文件夹（如果不存在）
 os.makedirs(geojson_output_folder, exist_ok=True)
