@@ -2,8 +2,8 @@ import rasterio
 import numpy as np
 ssp_scenario = 'ssp126'
 # 输入的两个 TIFF 文件路径
-tiff_file1 = f'result/{ssp_scenario}/cropped/cropped_{ssp_scenario}_rf.tif' # 替换为你的第一个 TIFF 文件路径
-tiff_file2 = 'pic/cropped_predicted_rf.tif'  # 替换为你的第二个 TIFF 文件路径
+tiff_file1 = f'result/{ssp_scenario}/{ssp_scenario}_rf.tif' # 替换为你的第一个 TIFF 文件路径
+tiff_file2 = 'pic/predicted_rf.tif'  # 替换为你的第二个 TIFF 文件路径
 output_file = f'result/{ssp_scenario}/sub_{ssp_scenario}_rf.tif'  # 替换为输出文件路径
 
 
