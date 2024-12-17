@@ -30,12 +30,8 @@ gdf_geojson.plot(ax=ax, edgecolor='black', facecolor='white', alpha=0.5, label='
 import os
 
 
-tif_file_dir = f'result/{ssp_scenario}/cropped'
-tif_file = f'{tif_file_dir}/cropped_{ssp_scenario}_rf.tif'
+tif_file = f'data\cropped_result/tiff/cropped_{ssp_scenario}_rf.tif'
 
-# Check if the directory exists, if not, create it
-if not os.path.exists(tif_file_dir):
-    os.makedirs(tif_file_dir)
 
 # 提取文件名作为标题
 file_name = os.path.basename(tif_file)

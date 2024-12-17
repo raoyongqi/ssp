@@ -79,7 +79,7 @@ for tiff_folder in tiff_folders:
     for root, dirs, files in os.walk(tiff_folder):
         for tiff_file in files:
             # 检查文件是否是 .tif 文件，并且文件名包含 'sub'
-            if tiff_file.endswith('.tif') and 'sub' in tiff_file:
+            if tiff_file.endswith('.tif'):
                 tiff_path = os.path.join(root, tiff_file)  # 获取文件的完整路径
                 
                 # 构建输出路径
