@@ -10,9 +10,8 @@ grasslands_gdf = gpd.read_file(grasslands_geojson_file)
 
 grasslands_gdf_filtered = grasslands_gdf
 
-ssp_scenario = 'ssp126'
+ssp_scenario = 'data/126'
 
-# 2. 筛选出值等于 10 的 Grasslands (草地)
 
 # 输入文件夹列表
 tiff_folders = [

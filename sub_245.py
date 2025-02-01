@@ -1,10 +1,10 @@
 import rasterio
 import numpy as np
-ssp_scenario = 'ssp245'
+ssp_scenario = '245'
 # 输入的两个 TIFF 文件路径
-tiff_file1 = f'result/{ssp_scenario}/{ssp_scenario}_rf.tif' # 替换为你的第一个 TIFF 文件路径
-tiff_file2 = 'pic/predicted_rf.tif'  # 替换为你的第二个 TIFF 文件路径
-output_file = f'result/{ssp_scenario}/sub_{ssp_scenario}_rf.tif'  # 替换为输出文件路径
+tiff_file1 = f'result/ssp{ssp_scenario}/predicted_{ssp_scenario}_rf.tif' # 替换为你的第一个 TIFF 文件路径
+tiff_file2 = 'pl/predicted_rf.tif'  # 替换为你的第二个 TIFF 文件路径
+output_file = f'result/ssp{ssp_scenario}/sub_{ssp_scenario}_rf.tif'  # 替换为输出文件路径
 
 
 # 读取第一个 TIFF 文件
@@ -25,7 +25,7 @@ result_data = data1 - data2
 
 # 更新输出文件的 profile（可以根据需要修改）
 profile.update({
-    'dtype': 'float32',  # 修改数据类型，如果需要的话
+    'dtype': 'float64',  # 修改数据类型，如果需要的话
     'count': 1,          # 输出文件只有一个波段
 })
 

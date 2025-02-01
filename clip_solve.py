@@ -19,7 +19,7 @@ from shapely.geometry import Polygon
 
 if platform.system() == "Windows":
     # Windows 环境的文件路径
-    base_path = r'C:\Users\r\Desktop\ssp'
+    base_path = os.getcwd()
 else:
     # Linux 环境的文件路径
     base_path = '/home/r/Desktop/ssp'
@@ -77,29 +77,21 @@ filtered_province_gdf = province_gdf[~province_gdf['name'].isin(excluded_provinc
 merged_gdf = gpd.GeoDataFrame( pd.concat([filtered_merged_df, filtered_province_gdf], ignore_index=True))
 
 
-# from shapely import MultiPolygon
-
-# from shapely.ops import unary_union
-
-# filtered_gdf['geometry'] = filtered_gdf['geometry'].apply(
-#     lambda geom: unary_union(geom) if isinstance(geom, MultiPolygon) else geom
-# )
-
 # 输入文件夹列表
 if platform.system() == "Windows":
     tiff_folders = [
-        r'C:\Users\r\Desktop\ssp\result',
+        'result',
     ]
 else:
     tiff_folders = [
-        '/home/r/Desktop/r-climate/data/result/',
+        'result',
     ]
 
 
     
 # 指定输出文件夹路径
-geojson_output_folder = os.path.join(base_path, 'data', 'cropped_result', 'geojson')
-tiff_output_folder = os.path.join(base_path, 'data', 'cropped_result', 'tiff')
+geojson_output_folder = os.path.join(base_path, 'cropped_result', 'geojson')
+tiff_output_folder = os.path.join(base_path, 'cropped_result', 'tiff')
 # 创建输出文件夹（如果不存在）
 os.makedirs(geojson_output_folder, exist_ok=True)
 os.makedirs(tiff_output_folder, exist_ok=True)
