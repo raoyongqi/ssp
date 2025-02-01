@@ -28,7 +28,8 @@ if gdf_geojson.crs != albers_proj:
 gdf_geojson.plot(ax=ax, edgecolor='black', facecolor='white', alpha=0.5, label='GeoJSON Data')
 
 # 读取并绘制 TIFF 数据
-tif_file = f'cropped_result/tiff/cropped_sub_{ssp_scenario}_rf.tif'
+# tif_file = f'result/ssp245/sub_245_rf.tif'
+tif_file = f'cropped_result/tiff/sub_{ssp_scenario}_rf.tif'
 
 # 提取文件名作为标题
 file_name = os.path.basename(tif_file)

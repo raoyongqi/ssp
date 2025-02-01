@@ -1,13 +1,10 @@
 import os
 import shutil
-import rasterio
-import numpy as np
-
 # 指定文件夹路径
 source_folder = 'cropped'  # 原始 TIFF 文件所在文件夹
 destination_folder = 'result'  # 目标文件夹
 os.makedirs(destination_folder, exist_ok=True)
-folder_path = 'cropped_data/ssp126/tiff'
+folder_path = 'cropped_data/ssp245/tiff'
 
 for filename in os.listdir(folder_path):
     if filename.endswith('.tif') or filename.endswith('.tiff'):
@@ -29,6 +26,9 @@ for filename in os.listdir(folder_path):
             new_file_path = os.path.join(folder_path, new_filename)
             # 重命名文件
             os.rename(old_file_path, new_file_path)
+
+
+
 # 确保目标文件夹存在
 for filename in os.listdir(folder_path):
     if filename.endswith('.tif') or filename.endswith('.tiff'):
@@ -81,7 +81,9 @@ for filename in os.listdir(folder_path):
             if old_file_path != new_file_path:  # 确保新文件名和旧文件名不同
                 shutil.copy(old_file_path, new_file_path)
                 print(f'Renamed: {filename} -> {new_filename}')
-
+import rasterio
+import numpy as np
+import os
 
 def process_tif_files(folder_path, output_file_path, prefix, operation="sum"):
     # 获取符合前缀条件的 TIFF 文件
@@ -121,11 +123,12 @@ def process_tif_files(folder_path, output_file_path, prefix, operation="sum"):
     
     print(f"Result saved as: {output_file_path}")
 
+
 # 调用函数处理不同变量
-process_tif_files('cropped_data/ssp126/tiff', 'plus/126/MAP.tif', 'prec', operation="sum")
-process_tif_files('cropped_data/ssp126/tiff', 'plus/126/TMAX.tif', 'tmax', operation="mean")
-process_tif_files('cropped_data/ssp126/tiff', 'plus/126/TMIN.tif', 'tmin', operation="mean")
-process_tif_files('cropped_data/ssp126/tiff', 'plus/126/TAVG.tif', 'tavg', operation="mean")
-process_tif_files('cropped_data/ssp126/tiff', 'plus/126/SRAD.tif', 'srad', operation="mean")
-process_tif_files('cropped_data/ssp126/tiff', 'plus/126/WIND.tif', 'wind', operation="mean")
-process_tif_files('cropped_data/ssp126/tiff', 'plus/126/VAPR.tif', 'vapr', operation="mean")
+process_tif_files('cropped_data/ssp245/tiff', 'plus/245/MAP.tif', 'prec', operation="sum")
+process_tif_files('cropped_data/ssp245/tiff', 'plus/245/TMAX.tif', 'tmax', operation="mean")
+process_tif_files('cropped_data/ssp245/tiff', 'plus/245/TMIN.tif', 'tmin', operation="mean")
+process_tif_files('cropped_data/ssp245/tiff', 'plus/245/TAVG.tif', 'tavg', operation="mean")
+process_tif_files('cropped_data/ssp245/tiff', 'plus/245/SRAD.tif', 'srad', operation="mean")
+process_tif_files('cropped_data/ssp245/tiff', 'plus/245/WIND.tif', 'wind', operation="mean")
+process_tif_files('cropped_data/ssp245/tiff', 'plus/245/VAPR.tif', 'vapr', operation="mean")

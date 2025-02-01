@@ -1,36 +1,38 @@
 import rasterio
 import numpy as np
+
 ssp_scenario = '245'
-# 输入的两个 TIFF 文件路径
-tiff_file1 = f'result/ssp{ssp_scenario}/predicted_{ssp_scenario}_rf.tif' # 替换为你的第一个 TIFF 文件路径
-tiff_file2 = 'pl/predicted_rf.tif'  # 替换为你的第二个 TIFF 文件路径
-output_file = f'result/ssp{ssp_scenario}/sub_{ssp_scenario}_rf.tif'  # 替换为输出文件路径
+tiff_file1 = f'result/predicted_{ssp_scenario}_rf.tif'
+tiff_file2 = 'pl/predicted_rf.tif'
+output_file = f'result/sub_{ssp_scenario}_rf.tif'
 
+# 读取文件
+with rasterio.open(tiff_file1) as src1, rasterio.open(tiff_file2) as src2:
+    data1 = src1.read(1).astype(np.float64)
+    data2 = src2.read(1).astype(np.float64)
+    profile = src1.profile
 
-# 读取第一个 TIFF 文件
-with rasterio.open(tiff_file1) as src1:
-    data1 = src1.read(1)  # 读取第一波段数据
-    profile = src1.profile  # 获取文件的元数据
+    # 处理 nodata 值
+    if src1.nodata is not None:
+        data1[data1 == src1.nodata] = np.nan
+    if src2.nodata is not None:
+        data2[data2 == src2.nodata] = np.nan
 
-# 读取第二个 TIFF 文件
-with rasterio.open(tiff_file2) as src2:
-    data2 = src2.read(1)  # 读取第一波段数据
+    # 确保形状一致
+    if data1.shape != data2.shape:
+        raise ValueError("The shapes of the two TIFF files do not match.")
 
-# 确保两个数组的形状相同
-if data1.shape != data2.shape:
-    raise ValueError("The shapes of the two TIFF files do not match.")
+    # 相减运算，忽略 nodata
+    result_data = np.where(~np.isnan(data1) & ~np.isnan(data2), data1 - data2, np.nan)
 
-# 进行相减运算
-result_data = data1 - data2
-
-# 更新输出文件的 profile（可以根据需要修改）
+# 更新 profile 并保存
 profile.update({
-    'dtype': 'float64',  # 修改数据类型，如果需要的话
-    'count': 1,          # 输出文件只有一个波段
+    'dtype': 'float64',
+    'count': 1,
+    'nodata': np.nan
 })
 
-# 写入结果到新的 TIFF 文件
 with rasterio.open(output_file, 'w', **profile) as dst:
-    dst.write(result_data, 1)  # 将结果写入第一波段
+    dst.write(result_data, 1)
 
 print(f"Output TIFF file has been created at: {output_file}")

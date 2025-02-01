@@ -138,7 +138,7 @@ tif_files += [os.path.join(tif_folder1, f) for f in os.listdir(tif_folder1) if f
 
 
 
-output_folder = 'result/ssp245'  # 替换为实际输出文件夹路径
+output_folder = 'result'  # 替换为实际输出文件夹路径
 
 data_list = []
 profiles = []

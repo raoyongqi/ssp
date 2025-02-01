@@ -4,7 +4,6 @@ import rasterio
 import geopandas as gpd
 import cartopy.crs as ccrs
 import os
-from matplotlib.colors import LinearSegmentedColormap
 
 # 定义 Albers 投影坐标系
 albers_proj = ccrs.AlbersEqualArea(
@@ -23,13 +22,13 @@ if gdf_geojson.crs != albers_proj:
 
 # 定义要绘制的 TIFF 文件路径
 tif_files = [
-    'cropped_result/tiff/sub_126_rf.tif',
-    'cropped_result/tiff/sub_245_rf.tif',
-    'cropped_result/tiff/sub_370_rf.tif',
-    'cropped_result/tiff/sub_585_rf.tif'
+    'cropped_result/tiff/predicted_126_rf.tif',
+    'cropped_result/tiff/predicted_245_rf.tif',
+    'cropped_result/tiff/predicted_370_rf.tif',
+    'cropped_result/tiff/predicted_585_rf.tif'
 ]
 # 创建绘图对象和子图
-fig, axes = plt.subplots(2, 2, figsize=(14, 12), subplot_kw={'projection': albers_proj})
+fig, axes = plt.subplots(2, 2, figsize=(14, 12), subplot_kw={'projection': albers_proj},wspace=0.5, hspace=0.3)
 axes = axes.flatten()  # 将 2x2 的子图数组展平为 1D 数组
 
 for i, tif_file in enumerate(tif_files):
@@ -61,9 +60,9 @@ for i, tif_file in enumerate(tif_files):
         print(f"TIFF 文件 {tif_file} 的最小值: {vmin}")
         print(f"TIFF 文件 {tif_file} 的最大值: {vmax}")
 
-    # 自定义颜色映射：从蓝色到绿色再到红色
-        colors = ["blue", "green", "red"]
-        cmap = LinearSegmentedColormap.from_list("blue_green_red", colors)
+        # 自定义颜色映射：从蓝色到绿色再到红色
+        cmap = plt.get_cmap('viridis').reversed()
+
         # 绘制栅格数据
         im = ax.imshow(data, cmap=cmap, interpolation='none', extent=extent, transform=ccrs.PlateCarree(), alpha=1)
 
@@ -85,7 +84,7 @@ plt.tight_layout()
 
 # 保存图形到文件
 output_dir = 'pic'
-output_file_path = f'{output_dir}/all_sub_rf.png'
+output_file_path = f'{output_dir}/all_scenarios_rf.png'
 
 # 检查目录是否存在，如果不存在则创建
 if not os.path.exists(output_dir):
