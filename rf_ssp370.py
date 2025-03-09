@@ -102,14 +102,14 @@ rf = RandomForestRegressor(n_estimators=100, random_state=42)
 
 # 6. 使用 Boruta 进行特征选择
 feat_selector = BorutaPy(rf, n_estimators='auto',max_iter=10, alpha=0.05, random_state=42, verbose=0)
-# # 7. 获取重要特征并选择前17个
+# # 7. 获取重要特征并选择前16个
 
 feat_selector.fit(X_train.values, y_train.values)
 # 按照ranking_的顺序排序特征名
 sorted_features = [feature for _, feature in sorted(zip(feat_selector.ranking_, feature_columns))]
 
 
-X = data[[*sorted_features[:17]]]
+X = data[[*sorted_features[:16]]]
 y =  data['RATIO']  # 目标变量  # 替换为你的目标变量
 
 
@@ -132,10 +132,14 @@ r2 = r2_score(y_test, y_pred)
 ssp_scenario = '370'  
 
 tif_folder1 =  os.path.join( 'plus', ssp_scenario)
+
 tif_files = []
 
-tif_files += [os.path.join(tif_folder1, f) for f in os.listdir(tif_folder1) if f.endswith('.tif')]
-
+tif_files += [
+    os.path.join(tif_folder1, f) 
+    for f in os.listdir(tif_folder1) 
+    if f.endswith('.tif') and any(f.startswith(col) for col in data.columns)
+]
 
 
 output_folder = 'result'  # 替换为实际输出文件夹路径
@@ -169,10 +173,10 @@ df = pd.DataFrame(data_with_coords, columns=feature_names)
 model_feature_names = feature_columns
 
 
-sorted_features[:17] = [feature.upper() for feature in sorted_features[:17]]
+sorted_features[:16] = [feature.upper() for feature in sorted_features[:16]]
 df.columns = df.columns.str.upper()
 
-df = df[[*sorted_features[:17]]]
+df = df[[*sorted_features[:16]]]
 print(df.isin([np.inf, -np.inf]).sum())  # 检查是否有无穷大值
 print(df.isna().sum())  # 检查是否有缺失值
 

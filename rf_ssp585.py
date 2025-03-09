@@ -132,10 +132,14 @@ r2 = r2_score(y_test, y_pred)
 ssp_scenario = '585'  
 
 tif_folder1 =  os.path.join( 'plus', ssp_scenario)
+
 tif_files = []
 
-tif_files += [os.path.join(tif_folder1, f) for f in os.listdir(tif_folder1) if f.endswith('.tif')]
-
+tif_files += [
+    os.path.join(tif_folder1, f) 
+    for f in os.listdir(tif_folder1) 
+    if f.endswith('.tif') and any(f.startswith(col) for col in data.columns)
+]
 
 
 output_folder = 'result'  # 替换为实际输出文件夹路径
